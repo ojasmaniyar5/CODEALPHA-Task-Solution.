@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #login-form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #dashboard {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #feeds {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .social-feed {
+            max-width: 300px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Social Media Dashboard</h1>
+
+    <div id="login-form">
+        <h2>Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="dashboard" style="display: none;">
+        <h2>Welcome, <span id="user"></span>!</h2>
+        <div id="feeds"></div>
+    </div>
+
+    <script>
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            // Perform authentication (this is just a static example)
+            if (username === 'demo' && password === 'demo') {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('user').innerText = username;
+                loadFeeds();
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+        }
+
+        function loadFeeds() {
+            // This is a static example. In a real application, you would fetch data from social media APIs.
+            var feeds = [
+                { platform: 'Twitter', content: 'Sample tweet 1' },
+                { platform: 'Instagram', content: 'Sample Instagram post 1' },
+                { platform: 'Facebook', content: 'Sample Facebook post 1' }
+            ];
+
+            var feedsContainer = document.getElementById('feeds');
+            feedsContainer.innerHTML = '';
+
+            feeds.forEach(function(feed) {
+                var feedElement = document.createElement('div');
+                feedElement.classList.add('social-feed');
+                feedElement.innerHTML = `<h3>${feed.platform}</h3>
+                                         <p>${feed.content}</p>`;
+                feedsContainer.appendChild(feedElement);
+            });
+        }
+    </script>
+</body>
+</html>

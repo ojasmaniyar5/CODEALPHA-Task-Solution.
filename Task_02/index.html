@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #expense-form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            align-content: center;
+        }
+
+        #expenses-list {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Expense Tracker</h1>
+
+    <div id="expense-form">
+        <label for="expense">Expense:</label>
+        <input type="text" id="expense" required><br><br>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" required><br><br>
+        <button onclick="addExpense()">Add Expense</button>
+    </div>
+
+    <div id="expenses-list">
+        <h2>Expenses:</h2>
+        <ul id="expenses">
+            <!-- Expenses will be displayed here -->
+        </ul>
+    </div>
+
+    <script>
+        // Function to add an expense
+        function addExpense() {
+            var expenseName = document.getElementById('expense').value;
+            var expenseAmount = document.getElementById('amount').value;
+
+            if (expenseName && expenseAmount) {
+                // Create a new expense object
+                var expense = {
+                    name: expenseName,
+                    amount: parseFloat(expenseAmount)
+                };
+
+                // Get existing expenses from local storage
+                var expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+                // Add the new expense
+                expenses.push(expense);
+
+                // Save the updated expenses to local storage
+                localStorage.setItem('expenses', JSON.stringify(expenses));
+
+                // Update the displayed expenses
+                displayExpenses();
+
+                // Clear the input fields
+                document.getElementById('expense').value = '';
+                document.getElementById('amount').value = '';
+            }
+        }
+
+        // Function to display expenses
+        function displayExpenses() {
+            var expensesList = document.getElementById('expenses');
+            var expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+            // Clear the existing list
+            expensesList.innerHTML = '';
+
+            // Display each expense
+            expenses.forEach(function(expense, index) {
+                var li = document.createElement('li');
+                li.innerHTML = `<span>${expense.name}: $${expense.amount.toFixed(2)}</span>
+                                <button onclick="editExpense(${index})">Edit</button>
+                                <button onclick="deleteExpense(${index})">Delete</button>`;
+                expensesList.appendChild(li);
+            });
+        }
+
+        // Function to edit an expense
+        function editExpense(index) {
+            var expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            var updatedName = prompt('Enter the updated expense name:', expenses[index].name);
+            var updatedAmount = prompt('Enter the updated expense amount:', expenses[index].amount);
+
+            if (updatedName !== null && updatedAmount !== null) {
+                expenses[index].name = updatedName;
+                expenses[index].amount = parseFloat(updatedAmount);
+
+                // Save the updated expenses to local storage
+                localStorage.setItem('expenses', JSON.stringify(expenses));
+
+                // Update the displayed expenses
+                displayExpenses();
+            }
+        }
+
+        // Function to delete an expense
+        function deleteExpense(index) {
+            var expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+            // Remove the expense at the specified index
+            expenses.splice(index, 1);
+
+            // Save the updated expenses to local storage
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+
+            // Update the displayed expenses
+            displayExpenses();
+        }
+
+        // Initial display of expenses
+        displayExpenses();
+    </script>
+</body>
+</html>
